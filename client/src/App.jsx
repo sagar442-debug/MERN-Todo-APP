@@ -1,9 +1,19 @@
-import Input from './components/Input'
+import './App.css'
+import InputBox from './components/InputBox'
+import TaskList from './components/TaskList'
 
-export default function App() {
+function App() {
+
   return (
-    <div>
-      <Input/>
+    <div className='max-w-3xl mx-auto'>
+      <h1 className='text-3xl font-semibold text-center mt-2'>
+        Todo Web App
+      </h1>
+
+        <InputBox/>
+        <TaskList/>
     </div>
   )
 }
+
+export default App
