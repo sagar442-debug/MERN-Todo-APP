@@ -5,27 +5,28 @@ import { addTask } from '../redux/task/taskSlice';
 export default function InputBox() {
     const dispatch = useDispatch();
     const backTask = useSelector((state) => state.todo.tasks);
-        
-    const [finalText, setFinalText] = useState({text: "This is the actual text"});
+    
     const [singleTask, setSingleTask] = useState('')
     const [random, setRandom] = useState({})
     const handleChange = (e) =>{
         setSingleTask(e.target.value)
-        
+        setRandom({text:singleTask})
     }
 
+
+    
     const handleAddTask = async (e) =>{
         e.preventDefault();
         dispatch(addTask({id: Date.now(), text: singleTask}))
         setSingleTask('')
-        setRandom({text: singleTask})
+        console.log(random)
         try {
             const res = await fetch('http://localhost:6868/api/task',{
             method: 'POST',
             headers: {
                 'Content-Type' : 'application/json',
             },
-            body : JSON.stringify(finalText)
+            body : JSON.stringify(random)
         })
             const data = await res.json();
         } catch (err) {
