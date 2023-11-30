@@ -1,27 +1,44 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { addTask } from '../redux/task/taskSlice';
 
 export default function InputBox() {
     const dispatch = useDispatch();
-    
-
+    const backTask = useSelector((state) => state.todo.tasks);
+        
+    const [finalText, setFinalText] = useState({text: "This is the actual text"});
     const [singleTask, setSingleTask] = useState('')
+    const [random, setRandom] = useState({})
     const handleChange = (e) =>{
         setSingleTask(e.target.value)
+        
     }
 
-    const handleAddTask = (e) =>{
+    const handleAddTask = async (e) =>{
         e.preventDefault();
         dispatch(addTask({id: Date.now(), text: singleTask}))
         setSingleTask('')
+        setRandom({text: singleTask})
+        try {
+            const res = await fetch('http://localhost:6868/api/task',{
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json',
+            },
+            body : JSON.stringify(finalText)
+        })
+            const data = await res.json();
+        } catch (err) {
+            console.log(err)
+        }
+        
     }
 
 
   return (
     <div className='mt-7'>
         <form className='flex justify-center gap-4'>
-            <input value={singleTask} onChange={handleChange} type="text" className="p-4 bg-slate-100 rounded-lg outline-none text-lg" placeholder='Enter your task here'/>
+            <input value={singleTask} onChange={handleChange} type="text" id="text" className="p-4 bg-slate-100 rounded-lg outline-none text-lg" placeholder='Enter your task here'/>
             <button onClick={handleAddTask} className="bg-green-600 rounded-lg p-2 px-6 text-white hover:opacity-70">Add</button>
         </form>
     </div>
